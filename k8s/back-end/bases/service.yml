@@ -16,4 +16,3 @@ spec:
     targetPort: 80
   selector:
     app: back-end
-  loadBalancerIP: 10.148.11.17
