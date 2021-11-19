@@ -13,7 +13,7 @@ env:
   GKE_ZONE: asia-southeast1-a
   DEPLOYMENT_NAME: front-end
   IMAGE: front-end
-  INGRESS_IP: 1.1.1.1
+  INGRESS_IP: 34.124.143.67
 
 jobs:
   setup-build-publish-deploy:
