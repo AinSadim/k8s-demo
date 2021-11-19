@@ -35,7 +35,7 @@ jobs:
       run: npm install yarn -g
     - name: Install Packages & build
       run: |-
-        cd ../front-end
+        cd ./front-end
         yarn
         yarn build
         chmod +x ./deploy/*
@@ -61,6 +61,7 @@ jobs:
     - name: Build
       # working-directory: ./build/install/moges-server-game
       run: |-
+        cd ./front-end
         docker build \
           --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
