@@ -31,22 +31,17 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: cd to front-end folder
-      run: cd ./front-end
     - name: Install Yarn
       run: npm install yarn -g
-    - name: Install Packages
-      run: yarn
-    - name: Build page
-      run: yarn build
-    - name: Grant execute permission for nginx
-      run: chmod +x ./deploy/*
-    - name: Create nginx folder
-      run: mkdir ./nginx && mkdir ./nginx/conf.d
-    - name: Generate default nginx configuration file setting
-      run: ./deploy/nginx.default.conf.sh "$INGRESS_IP" > ./nginx/conf.d/default.conf
-    - name: Generate nginx configuration file setting
-      run: ./deploy/nginx.conf.sh "$INGRESS_IP" > ./nginx/nginx.conf
+    - name: Install Packages & build
+      run: |-
+        cd ./front-end
+        yarn
+        yarn build
+        chmod +x ./deploy/*
+        mkdir ./nginx && mkdir ./nginx/conf.d
+        ./deploy/nginx.default.conf.sh "$INGRESS_IP" > ./nginx/conf.d/default.conf
+        ./deploy/nginx.conf.sh "$INGRESS_IP" > ./nginx/nginx.conf
 
     # Setup gcloud CLI
     - uses: google-github-actions/setup-gcloud@master
