@@ -59,7 +59,6 @@ jobs:
         gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
     # Build the Docker image
     - name: Build
-      # working-directory: ./build/install/moges-server-game
       run: |-
         cd ./front-end
         docker build \
