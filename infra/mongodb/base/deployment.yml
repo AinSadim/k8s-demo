@@ -1,0 +1,35 @@
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: db-master
+spec:
+  serviceName: 'db-master'
+  selector:
+    matchLabels:
+      app: db-master
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: db-master
+    spec:
+      containers:
+      - name: mongo
+        image: mongo
+        ports:
+        - containerPort: 27017
+          name: db-master
+        volumeMounts:
+          - name: mongo-persistent-storage
+            mountPath: /data/db
+  volumeClaimTemplates:
+  - metadata:
+      name: mongo-persistent-storage
+      annotations:
+        volume.beta.kubernetes.io/storage-class: 'standard'
+    spec:
+      accessModes: [ 'ReadWriteOnce' ]
+      resources:
+        requests:
+          storage: 3Gi

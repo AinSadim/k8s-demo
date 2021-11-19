@@ -1,0 +1,45 @@
+name: ingress
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmDeployment:
+        description: 'Confirm Deployment'     
+        required: true
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_DEMO_PROJECT }}
+  GKE_CLUSTER: cluster-1
+  GKE_ZONE: asia-southeast1-a
+
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Setup gcloud CLI
+    - uses: google-github-actions/setup-gcloud@master
+      with:
+        version: '290.0.1'
+        service_account_key: ${{ secrets.GKE_DEMO_KEY }}
+        project_id: ${{ secrets.GKE_DEMO_PROJECT }}
+
+    # Configure Docker to use the gcloud command-line tool as a credential
+    # helper for authentication
+    - run: |-
+        gcloud --quiet auth configure-docker
+    # Get the GKE credentials so we can deploy to the cluster
+    - run: |-
+        gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
+    
+    #kubectl apply -f ./rabbit/rbac.yaml //TODO: Must run manual this command 
+        
+    - name: shell
+      run: |-
+        kubectl apply -f ./infra/ingress-srv.yaml
+
