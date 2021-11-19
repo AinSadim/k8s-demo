@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: back-end
+spec:
+  template:
+    spec:
+      containers:
+      - name: back-end
+        env:
+          - name: PORT
+            value: '80'
+          - name : MONGO_URI
+            value: 'mongodb://10.148.11.12:27017/demo'
